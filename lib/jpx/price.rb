@@ -4,10 +4,9 @@ require "time"
 module Jpx
   module Price
     class << self
-
-      def sq_days
+      def sq_dates
         from = Date.new(2006, 1, 1)
-        to = Date.today
+        to = Date.today + 120
 
         (from.year..to.year).map do |year|
           [3, 6, 9, 12].map do |month|
