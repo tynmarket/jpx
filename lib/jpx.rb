@@ -1,4 +1,5 @@
 require "jpx/version"
+require "jpx/price"
 
 module Jpx
   class Error < StandardError; end
