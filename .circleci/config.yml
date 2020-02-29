@@ -14,6 +14,9 @@ jobs:
       - restore_cache:
           keys:
             - jpx-bundle-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: install bundler
+          command: gem install bundler:2.1.4
 
       - run:
           name: bundle install
