@@ -4,6 +4,16 @@ require "time"
 module Jpx
   module Price
     class << self
+      def near_term?(time, contract_month)
+        date = time.to_date
+        @sq_dates ||= sq_dates
+        sq_date = @sq_dates.find { |sq_date| sq_date > date }
+        near_contract_month = sprintf("%d%02d", sq_date.year, sq_date.month)
+
+        contract_month == near_contract_month
+      end
+
+      # MSQ祝日は今のところない
       def sq_dates
         from = Date.new(2006, 1, 1)
         to = Date.today + 120
