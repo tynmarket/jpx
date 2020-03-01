@@ -4,6 +4,10 @@ require "trading_day_jp"
 
 module Jpx
   module Price
+    SESSION_ID_DAY = "999"
+    SESSION_DAY = 0
+    SESSION_NIGHT = 1
+
     class << self
       def parse(path)
         data = CSV.read(path)[1..-1].map do |row|
@@ -11,6 +15,7 @@ module Jpx
 
           # 取引日, _, 識別コード, セッション区分, 時刻, 始値, 高値, 安値, 終値, 出来高, VWAP, 約定回数, _, 限月（i = 13）
           datetime = Time.parse(row[0] + row[4])
+          session = to_session(row[3])
 
           # 期近のみ取得
           next unless near_term?(datetime, row[13])
@@ -18,7 +23,7 @@ module Jpx
           # 大引けの場合15:15になるので、15:10として扱う
           datetime -= 60 * 5 if row[4] == "1515"
 
-          if row[3] == "003"
+          if session == SESSION_NIGHT
             prev_date = TradingDayJp.prev(datetime.to_date)
             prev_datetime = Time.new(prev_date.year, prev_date.month, prev_date.day, datetime.hour, datetime.min)
 
@@ -32,11 +37,21 @@ module Jpx
           end
 
           {
-            datetime: datetime
+            datetime: datetime,
+            session: session,
+            open: row[5].to_i,
+            high: row[6].to_i,
+            low: row[7].to_i,
+            close: row[8].to_i,
+            volume: row[9].to_i,
           }
         end
 
         data.compact
+      end
+
+      def to_session(session)
+        session == SESSION_ID_DAY ? SESSION_DAY : SESSION_NIGHT
       end
 
       def near_term?(time, contract_month)

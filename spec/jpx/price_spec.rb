@@ -16,9 +16,19 @@ module Jpx
       before { file.open }
 
       context "寄り付き" do
-        let(:data) { "20180104,18,163030018,999,0845,23100,23100,23080,23080,3027,23098.1169,125,10845,201803" }
+        let(:data) { "20180104,18,163030018,999,0845,23100,23200,23080,23082,3027,23098.1169,125,10845,201803" }
 
-        it { expect(price[:datetime]).to eq Time.new(2018, 1, 4, 8, 45) }
+        it do
+          expect(price).to eq ({
+            datetime: Time.new(2018, 1, 4, 8, 45),
+            session: Price::SESSION_DAY,
+            open: 23100,
+            high: 23200,
+            low: 23080,
+            close: 23082,
+            volume: 3027,
+          })
+        end
       end
 
       context "大引け" do
@@ -31,6 +41,7 @@ module Jpx
         let(:data) { "20180104,18,163030018,003,1630,22760,22760,22760,22760,189,22760,5,01630,201803" }
 
         it { expect(price[:datetime]).to eq Time.new(2017, 12, 29, 16, 30) }
+        it { expect(price[:session]).to eq Price::SESSION_NIGHT }
       end
 
       context "大納会翌日の05:30" do |variable|
