@@ -23,9 +23,6 @@ Or install it yourself as:
 
 ## Usage
 
-日本の証券取引所で取引が行われる日であるか判定します。<br>
-大発会〜大納会のうち、休日及び祝日でない日が該当します。
-
 ``` ruby
 Jpx::Price.parse("/path/to/file.csv")
 
