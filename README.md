@@ -24,6 +24,7 @@ Or install it yourself as:
 ## Usage
 
 ``` ruby
+# CSVファイルから期近のデータを取得します
 Jpx::Price.parse("/path/to/file.csv")
 
 #=> [{
