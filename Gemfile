@@ -4,6 +4,6 @@ source "https://rubygems.org"
 gemspec
 
 gem "pry-byebug"
-gem "rake", "~> 12.0"
-gem "rspec", "~> 3.0"
+gem "rake"
+gem "rspec"
 gem "rspec_junit_formatter"

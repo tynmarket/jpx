@@ -4,6 +4,27 @@ require "time"
 module Jpx
   module Price
     class << self
+      def parse(path)
+        data = []
+
+        CSV.foreach(path, return_headers: false) do |row|
+          # 取引日, _, 識別コード, セッション区分, 時刻, 始値, 高値, 安値, 終値, 出来高, VWAP, 約定回数, _, 限月（i = 13）
+          datetime = Time.parse(row[0] + row[4])
+
+          if near_term?(datetime, row[13])
+            if row[3] == "003"
+
+            end
+
+            data << {
+              datetime: datetime
+            }
+          end
+        end
+
+        data
+      end
+
       def near_term?(time, contract_month)
         date = time.to_date
         @sq_dates ||= sq_dates
